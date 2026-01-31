@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, Home, BookOpen, X, Sparkles, LogOut, ChevronRight, 
-  Utensils, ShoppingBasket, Wallet, Zap, Wrench 
+  Utensils, ShoppingBasket, Wallet, Zap, Wrench, ArrowUpDown
 } from 'lucide-react';
 import { askDonaCamila } from '../services/geminiService';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -21,6 +21,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
   const [chatMessages, setChatMessages] = useState<{role: 'user' | 'camila', text: string}[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    return localStorage.getItem('lar_inteligente_expanded') === 'true';
+  });
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
@@ -30,6 +33,10 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
     { label: 'Utilidades', path: '/utilities', icon: Zap },
     { label: 'Reparos', path: '/maintenance', icon: Wrench },
   ];
+
+  useEffect(() => {
+    localStorage.setItem('lar_inteligente_expanded', isExpanded.toString());
+  }, [isExpanded]);
 
   useEffect(() => {
     if (chatEndRef.current) {
@@ -52,7 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
   const isManual = location.pathname === '/manual';
 
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div className={`flex flex-col min-h-screen w-full transition-all duration-500 ${isExpanded ? 'pb-96' : ''}`}>
       {/* HEADER PADRÃO IDEAL */}
       <header className="h-20 md:h-24 bg-white/90 backdrop-blur-xl border-b border-white flex items-center justify-center px-6 sticky top-0 z-50 shadow-sm">
         <div className="w-full max-w-5xl flex items-center justify-between">
@@ -80,10 +87,19 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
             ))}
           </nav>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* BOTÃO PARA AUMENTAR ALTURA DO SITE */}
+            <button 
+              onClick={() => setIsExpanded(!isExpanded)}
+              title="Ajustar Altura do Site"
+              className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all shadow-sm ${isExpanded ? 'bg-indigo-600 border-indigo-500 text-white rotate-180' : 'bg-white border-slate-50 text-slate-400'}`}
+            >
+              <ArrowUpDown size={20} />
+            </button>
+
             <button 
               onClick={() => { if(confirm('Sair do app?')) navigate('/login') }} 
-              className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center border-2 border-white shadow-sm"
+              className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center border-2 border-white shadow-sm hover:bg-rose-100 transition-colors"
             >
               <LogOut size={20} />
             </button>
@@ -91,9 +107,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
         </div>
       </header>
 
-      {/* CONTEÚDO PADRONIZADO */}
-      <main className="flex-1 flex justify-center w-full px-4 py-8 relative">
-        <div className="w-full max-w-5xl relative z-10">
+      {/* CONTEÚDO PADRONIZADO COM ALTURA DINÂMICA */}
+      <main className={`flex-1 flex justify-center w-full px-4 relative transition-all duration-700 ${isExpanded ? 'py-24' : 'py-8'}`}>
+        <div className={`w-full max-w-5xl relative z-10 transition-all duration-700 ${isExpanded ? 'space-y-32' : 'space-y-0'}`}>
           {children}
         </div>
       </main>

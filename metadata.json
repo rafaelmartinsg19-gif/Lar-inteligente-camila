@@ -1,0 +1,7 @@
+{
+  "name": "Lar Inteligente Camila ",
+  "description": "Um aplicativo premium para organização doméstica, economia familiar e manutenção residencial focado em acessibilidade para idosos.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

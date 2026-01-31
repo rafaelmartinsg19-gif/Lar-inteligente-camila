@@ -54,11 +54,11 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
   return (
     <div className="flex flex-col min-h-screen w-full">
       {/* HEADER PADRÃO IDEAL */}
-      <header className="h-20 md:h-24 bg-white/95 backdrop-blur-md border-b border-slate-100 flex items-center justify-center px-6 sticky top-0 z-50 shadow-sm">
-        <div className="w-full max-w-4xl flex items-center justify-between">
+      <header className="h-20 md:h-24 bg-white/90 backdrop-blur-xl border-b border-white flex items-center justify-center px-6 sticky top-0 z-50 shadow-sm">
+        <div className="w-full max-w-5xl flex items-center justify-between">
           <div className="flex items-center gap-4">
             {onBack && (
-              <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-slate-100 rounded-xl text-slate-900 shadow-sm hover:bg-slate-50 transition-all">
+              <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-slate-50 rounded-xl text-slate-900 shadow-sm hover:bg-slate-50 transition-all">
                 <ArrowLeft size={20} />
               </button>
             )}
@@ -91,14 +91,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
         </div>
       </header>
 
-      {/* CONTEÚDO */}
+      {/* CONTEÚDO PADRONIZADO */}
       <main className="flex-1 flex justify-center w-full px-4 py-8 relative">
-        <div className="w-full max-w-4xl relative z-10">
+        <div className="w-full max-w-5xl relative z-10">
           {children}
         </div>
       </main>
 
-      {/* NAV MOBILE PADRÃO IDEAL */}
+      {/* NAV MOBILE */}
       <div className="lg:hidden fixed bottom-6 left-0 right-0 flex justify-center px-6 z-50 pointer-events-none">
         <nav className="w-full max-w-sm h-16 bg-white/95 backdrop-blur-md rounded-full flex justify-around items-center px-6 shadow-2xl border-4 border-white pointer-events-auto">
           <button onClick={() => navigate('/home')} className={`flex flex-col items-center transition-all ${isHome ? 'text-[#e85d97]' : 'text-slate-400'}`}>
@@ -120,7 +120,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
         </nav>
       </div>
 
-      {/* CHAT - PADRÃO IDEAL */}
+      {/* CHAT */}
       {isChatOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
           <div className="w-full max-w-lg bg-white h-[80vh] rounded-[2.5rem] shadow-2xl border-4 border-white flex flex-col overflow-hidden">

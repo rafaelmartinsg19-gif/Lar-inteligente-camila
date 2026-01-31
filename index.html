@@ -14,7 +14,7 @@
         --brand-magenta: #e85d97;
         --kitchen-terracotta: #a34e36;
         --kitchen-wood: #5d4037;
-        --kitchen-cream: rgba(253, 250, 246, 0.92);
+        --kitchen-cream: rgba(253, 250, 246, 0.95);
       }
       
       * { 
@@ -26,7 +26,7 @@
       
       html {
         scroll-behavior: smooth;
-        font-size: 16px; /* Retornado ao padrão ideal de 16px com escala baseada em REM */
+        font-size: 16px;
       }
 
       @media (min-width: 1024px) {
@@ -34,8 +34,9 @@
       }
       
       body { 
-        background-color: #fcfcfc;
-        background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url("https://images.unsplash.com/photo-1556912177-f547c1268295?auto=format&fit=crop&q=80&w=2000");
+        background-color: #f0f2f5;
+        /* Imagem de Cozinha Americana Premium */
+        background-image: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url("https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=2000");
         background-attachment: fixed;
         background-size: cover;
         background-position: center;
@@ -53,29 +54,12 @@
         text-transform: uppercase;
       }
 
-      .label-premium {
-        font-size: 0.75rem;
-        font-weight: 900 !important;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: var(--kitchen-terracotta);
-        margin-bottom: 0.5rem;
-        display: block;
-        opacity: 0.6;
-      }
-
       .kitchen-card {
         background: white;
-        border-radius: 2rem;
+        border-radius: 2.5rem;
         border: 4px solid #ffffff;
-        box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
-      }
-
-      .kitchen-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--brand-magenta);
-        box-shadow: 0 35px 70px -15px rgba(232, 93, 151, 0.1);
       }
 
       #root { 
@@ -92,14 +76,8 @@
         border-radius: 10px;
       }
 
-      input, select, textarea {
-        font-size: 1rem !important;
-      }
-
       @media print {
-        @page { size: A4; margin: 1cm; }
         body { background: white !important; background-image: none !important; }
-        .no-print { display: none !important; }
       }
     </style>
   <script type="importmap">

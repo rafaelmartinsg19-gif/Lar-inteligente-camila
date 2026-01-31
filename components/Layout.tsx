@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, Home, BookOpen, X, Sparkles, LogOut, ChevronRight, 
-  Utensils, ShoppingBasket, Wallet, Zap, Wrench, Menu 
+  Utensils, ShoppingBasket, Wallet, Zap, Wrench 
 } from 'lucide-react';
 import { askDonaCamila } from '../services/geminiService';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -28,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
     { label: 'Mercado', path: '/market', icon: ShoppingBasket },
     { label: 'Finanças', path: '/finances', icon: Wallet },
     { label: 'Utilidades', path: '/utilities', icon: Zap },
-    { label: 'Manutenção', path: '/maintenance', icon: Wrench },
+    { label: 'Reparos', path: '/maintenance', icon: Wrench },
   ];
 
   useEffect(() => {
@@ -52,124 +52,112 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
   const isManual = location.pathname === '/manual';
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-transparent overflow-x-hidden">
-      {/* HEADER ADAPTATIVO */}
-      <header className="h-20 md:h-24 bg-white/95 backdrop-blur-xl border-b-4 border-white/50 flex items-center justify-center px-4 md:px-12 sticky top-0 z-50 shadow-xl">
-        <div className="w-full max-w-[1440px] flex items-center justify-between">
-          <div className="flex items-center gap-4 md:gap-6">
+    <div className="flex flex-col min-h-screen w-full">
+      {/* HEADER PADRÃO IDEAL */}
+      <header className="h-20 md:h-24 bg-white/95 backdrop-blur-md border-b border-slate-100 flex items-center justify-center px-6 sticky top-0 z-50 shadow-sm">
+        <div className="w-full max-w-4xl flex items-center justify-between">
+          <div className="flex items-center gap-4">
             {onBack && (
-              <button onClick={onBack} className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white hover:bg-slate-100 rounded-xl md:rounded-2xl transition-all text-slate-900 border-2 md:border-4 border-slate-50 shadow-md">
-                <ArrowLeft size={20} className="md:w-6 md:h-6" strokeWidth={4} />
+              <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white border-2 border-slate-100 rounded-xl text-slate-900 shadow-sm hover:bg-slate-50 transition-all">
+                <ArrowLeft size={20} />
               </button>
             )}
             <div className="flex flex-col">
-              <h1 className="text-lg md:text-2xl font-black text-black tracking-tighter uppercase leading-none truncate max-w-[150px] md:max-w-none">Lar Inteligente</h1>
-              <p className="text-[#e85d97] mt-0.5 md:mt-1 font-black tracking-[0.2em] text-[9px] md:text-[11px] uppercase truncate">{title || 'Painel'}</p>
+              <h1 className="text-lg md:text-xl font-black text-black tracking-tighter uppercase leading-none">Lar Inteligente</h1>
+              <p className="text-[#e85d97] font-black tracking-widest text-[9px] uppercase">{title || 'PAINEL'}</p>
             </div>
           </div>
           
-          {/* Menu Horizontal Desktop */}
           <nav className="hidden lg:flex items-center gap-8">
             {navItems.map(item => (
               <Link 
                 key={item.path} 
                 to={item.path}
-                className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-[#e85d97] ${location.pathname === item.path ? 'text-[#e85d97] border-b-2 border-[#e85d97]' : 'text-slate-400'}`}
+                className={`text-[10px] font-black uppercase tracking-widest transition-all hover:text-[#e85d97] ${location.pathname === item.path ? 'text-[#e85d97]' : 'text-slate-400'}`}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
           
-          <div className="flex items-center gap-3 md:gap-6">
-            <div className="hidden sm:flex flex-col items-end">
-              <span className="text-slate-500 text-[9px] font-black uppercase tracking-[0.3em]">Cozinheira</span>
-              <span className="text-base md:text-lg font-black text-black uppercase tracking-tight">{userName}</span>
-            </div>
+          <div className="flex items-center gap-4">
             <button 
-              onClick={() => { if(confirm('Encerrar sessão?')) navigate('/login') }} 
-              className="w-10 h-10 md:w-14 md:h-14 bg-white hover:bg-rose-500 hover:text-white text-rose-600 rounded-xl md:rounded-2xl flex items-center justify-center transition-all border-2 md:border-4 border-rose-50 shadow-lg"
+              onClick={() => { if(confirm('Sair do app?')) navigate('/login') }} 
+              className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center border-2 border-white shadow-sm"
             >
-              <LogOut size={20} className="md:w-6 md:h-6" strokeWidth={4} />
+              <LogOut size={20} />
             </button>
           </div>
         </div>
       </header>
 
-      {/* CONTEÚDO PRINCIPAL COM LARGURA MÁXIMA CONTROLADA */}
-      <main className="flex-1 flex justify-center w-full px-4 py-6 md:px-12 md:py-12 pb-32 md:pb-48 relative">
-        <div className="fixed inset-0 bg-[#fdfaf6]/60 backdrop-blur-[2px] pointer-events-none z-0"></div>
-        <div className="w-full max-w-[1440px] animate-in fade-in zoom-in-95 duration-700 relative z-10">
+      {/* CONTEÚDO */}
+      <main className="flex-1 flex justify-center w-full px-4 py-8 relative">
+        <div className="w-full max-w-4xl relative z-10">
           {children}
         </div>
       </main>
 
-      {/* NAVEGAÇÃO MOBILE (OCULTA EM DESKTOP) */}
-      <div className="lg:hidden fixed bottom-6 left-0 right-0 flex justify-center px-4 z-50 pointer-events-none">
-        <nav className="w-full max-w-md h-20 md:h-24 bg-white/95 backdrop-blur-2xl rounded-[2.5rem] md:rounded-[3.5rem] flex justify-around items-center px-6 md:px-10 shadow-[0_20px_50px_rgba(0,0,0,0.25)] border-4 border-white pointer-events-auto">
-          <button onClick={() => navigate('/home')} className={`flex flex-col items-center gap-1 transition-all ${isHome ? 'text-[#e85d97] scale-110' : 'text-slate-900 opacity-40'}`}>
-            <Home size={28} className="md:w-[34px] md:h-[34px]" strokeWidth={4} />
-            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">Início</span>
+      {/* NAV MOBILE PADRÃO IDEAL */}
+      <div className="lg:hidden fixed bottom-6 left-0 right-0 flex justify-center px-6 z-50 pointer-events-none">
+        <nav className="w-full max-w-sm h-16 bg-white/95 backdrop-blur-md rounded-full flex justify-around items-center px-6 shadow-2xl border-4 border-white pointer-events-auto">
+          <button onClick={() => navigate('/home')} className={`flex flex-col items-center transition-all ${isHome ? 'text-[#e85d97]' : 'text-slate-400'}`}>
+            <Home size={24} />
+            <span className="text-[8px] font-black uppercase tracking-widest">Início</span>
           </button>
 
           <button 
             onClick={() => setIsChatOpen(true)}
-            className="relative -top-8 md:-top-12 w-20 h-20 md:w-28 md:h-28 bg-[#e85d97] text-white rounded-[2rem] md:rounded-[3rem] flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all border-[6px] md:border-[8px] border-white"
+            className="relative -top-6 w-16 h-16 bg-[#e85d97] text-white rounded-full flex items-center justify-center shadow-xl border-4 border-white active:scale-95 transition-all"
           >
-            <Sparkles size={32} className="md:w-[48px] md:h-[48px]" fill="currentColor" />
+            <Sparkles size={28} />
           </button>
 
-          <button onClick={() => navigate('/manual')} className={`flex flex-col items-center gap-1 transition-all ${isManual ? 'text-[#e85d97] scale-110' : 'text-slate-900 opacity-40'}`}>
-            <BookOpen size={28} className="md:w-[34px] md:h-[34px]" strokeWidth={4} />
-            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">Manual</span>
+          <button onClick={() => navigate('/manual')} className={`flex flex-col items-center transition-all ${isManual ? 'text-[#e85d97]' : 'text-slate-400'}`}>
+            <BookOpen size={24} />
+            <span className="text-[8px] font-black uppercase tracking-widest">Manual</span>
           </button>
         </nav>
       </div>
 
-      {/* CHAT DONA CAMILA - RESPONSIVO */}
+      {/* CHAT - PADRÃO IDEAL */}
       {isChatOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300">
-          <div className="w-full max-w-2xl bg-white h-[90vh] md:h-[85vh] rounded-[2.5rem] md:rounded-[4rem] shadow-2xl border-[6px] md:border-[10px] border-white flex flex-col overflow-hidden animate-in slide-in-from-bottom-10">
-            <div className="h-24 md:h-32 px-6 md:px-12 flex items-center justify-between border-b-4 border-slate-50 bg-[#fdfaf6]">
-              <div className="flex items-center gap-4 md:gap-8">
-                <div className="w-12 h-12 md:w-20 md:h-20 bg-[#e85d97] text-white rounded-2xl md:rounded-3xl flex items-center justify-center text-xl md:text-3xl font-black shadow-lg border-2 md:border-4 border-white rotate-3">C</div>
-                <div>
-                  <h3 className="font-black text-black text-lg md:text-2xl leading-none uppercase tracking-tighter">Dona Camila</h3>
-                  <div className="flex items-center gap-2 md:gap-3 mt-1 md:mt-3">
-                    <span className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <span className="text-emerald-700 font-black text-[9px] md:text-[11px] uppercase tracking-[0.3em]">Online</span>
-                  </div>
-                </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="w-full max-w-lg bg-white h-[80vh] rounded-[2.5rem] shadow-2xl border-4 border-white flex flex-col overflow-hidden">
+            <div className="h-20 px-8 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-[#e85d97] text-white rounded-xl flex items-center justify-center text-xl font-black">C</div>
+                <h3 className="font-black text-black text-lg leading-none uppercase tracking-tighter">Dona Camila</h3>
               </div>
-              <button onClick={() => setIsChatOpen(false)} className="w-10 h-10 md:w-16 md:h-16 bg-white hover:bg-slate-100 rounded-xl md:rounded-2xl transition-all text-slate-900 flex items-center justify-center border-2 md:border-4 border-slate-50 shadow-md"><X size={24} md:size={32} strokeWidth={4} /></button>
+              <button onClick={() => setIsChatOpen(false)} className="text-slate-400 hover:text-black"><X size={24} /></button>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-6 md:p-12 space-y-6 md:space-y-8 bg-[#fdfaf6]">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {chatMessages.length === 0 && (
-                <div className="bg-white p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] rounded-tl-none border-2 md:border-4 border-white shadow-xl text-lg md:text-xl font-black text-slate-900 max-w-[95%] md:max-w-[90%] leading-tight uppercase italic tracking-tighter">
-                  "Olá <span className="text-[#e85d97]">{userName}</span>! A cozinha está aberta. O que vamos economizar hoje, meu bem?"
+                <div className="bg-slate-50 p-6 rounded-[1.5rem] rounded-tl-none border-2 border-white text-lg font-bold text-slate-900 uppercase italic">
+                  "Olá {userName}! Em que posso te ajudar com economia hoje?"
                 </div>
               )}
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[95%] md:max-w-[90%] p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-xl border-2 md:border-4 ${msg.role === 'user' ? 'bg-[#5d4037] border-white text-white rounded-tr-none' : 'bg-white border-white text-slate-900 rounded-tl-none'} text-lg md:text-xl font-black leading-tight whitespace-pre-wrap uppercase tracking-tight`}>
+                  <div className={`max-w-[85%] p-5 rounded-[1.5rem] ${msg.role === 'user' ? 'bg-[#5d4037] text-white rounded-tr-none' : 'bg-slate-50 text-slate-900 rounded-tl-none border-2 border-white'} text-lg font-bold uppercase tracking-tight`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
-              {isTyping && <div className="text-[#e85d97] animate-pulse ml-4 md:ml-6 font-black tracking-[0.5em] text-[10px] md:text-xs uppercase">Camila está escrevendo...</div>}
+              {isTyping && <div className="text-[#e85d97] animate-pulse ml-4 font-black text-[10px] uppercase">Escrevendo...</div>}
               <div ref={chatEndRef} />
             </div>
 
-            <div className="p-6 md:p-10 border-t-4 border-slate-50 bg-white flex gap-4 md:gap-6">
+            <div className="p-6 border-t border-slate-100 flex gap-4">
               <input 
                 type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="DIGITE AQUI..." 
-                className="flex-1 bg-slate-50 border-2 md:border-4 border-slate-100 rounded-2xl md:rounded-3xl px-6 md:px-10 py-4 md:py-6 text-lg md:text-xl outline-none focus:border-[#e85d97] focus:bg-white transition-all font-black text-black uppercase placeholder:opacity-40" 
+                placeholder="Mensagem..." 
+                className="flex-1 bg-slate-50 border-2 border-slate-100 rounded-full px-6 py-4 outline-none focus:border-[#e85d97] font-bold text-black uppercase placeholder:opacity-40" 
               />
-              <button onClick={handleSendMessage} className="bg-[#e85d97] text-white w-16 md:w-24 h-16 md:h-22 rounded-2xl md:rounded-3xl shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all border-2 md:border-4 border-white shrink-0">
-                <ChevronRight size={32} md:size={44} strokeWidth={4} />
+              <button onClick={handleSendMessage} className="bg-[#e85d97] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all">
+                <ChevronRight size={28} />
               </button>
             </div>
           </div>

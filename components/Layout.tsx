@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, Home, BookOpen, X, Sparkles, LogOut, ChevronRight, 
-  Utensils, ShoppingBasket, Wallet, Zap, Wrench, ArrowUpDown
+  Utensils, ShoppingBasket, Wallet, Zap, Wrench, ArrowUpDown, Type
 } from 'lucide-react';
 import { askDonaCamila } from '../services/geminiService';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -21,9 +21,17 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
   const [chatMessages, setChatMessages] = useState<{role: 'user' | 'camila', text: string}[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  
+  // Estado para altura expandida
   const [isExpanded, setIsExpanded] = useState(() => {
     return localStorage.getItem('lar_inteligente_expanded') === 'true';
   });
+
+  // Estado para tamanho da fonte (1 = 100%, 1.15 = 115%, 1.3 = 130%)
+  const [fontScale, setFontScale] = useState(() => {
+    return Number(localStorage.getItem('lar_inteligente_font_scale')) || 1;
+  });
+
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
@@ -34,15 +42,28 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
     { label: 'Reparos', path: '/maintenance', icon: Wrench },
   ];
 
+  // Efeito para persistir altura
   useEffect(() => {
     localStorage.setItem('lar_inteligente_expanded', isExpanded.toString());
   }, [isExpanded]);
+
+  // Efeito para aplicar e persistir escala de fonte
+  useEffect(() => {
+    document.documentElement.style.setProperty('--global-scale', fontScale.toString());
+    localStorage.setItem('lar_inteligente_font_scale', fontScale.toString());
+  }, [fontScale]);
 
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [chatMessages]);
+
+  const toggleFontScale = () => {
+    if (fontScale === 1) setFontScale(1.15);
+    else if (fontScale === 1.15) setFontScale(1.3);
+    else setFontScale(1);
+  };
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -88,6 +109,18 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
           </nav>
           
           <div className="flex items-center gap-2 md:gap-4">
+            {/* BOTÃO PARA AUMENTAR FONTE */}
+            <button 
+              onClick={toggleFontScale}
+              title="Aumentar Letras"
+              className={`w-10 h-10 rounded-xl flex flex-col items-center justify-center border-2 transition-all shadow-sm ${fontScale > 1 ? 'bg-[#e85d97] border-[#e85d97] text-white' : 'bg-white border-slate-50 text-slate-400'}`}
+            >
+              <Type size={18} />
+              <span className="text-[7px] font-black uppercase leading-none mt-0.5">
+                {fontScale === 1 ? 'A' : fontScale === 1.15 ? 'A+' : 'A++'}
+              </span>
+            </button>
+
             {/* BOTÃO PARA AUMENTAR ALTURA DO SITE */}
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
@@ -114,24 +147,24 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
         </div>
       </main>
 
-      {/* NAV MOBILE */}
-      <div className="lg:hidden fixed bottom-6 left-0 right-0 flex justify-center px-6 z-50 pointer-events-none">
-        <nav className="w-full max-w-sm h-16 bg-white/95 backdrop-blur-md rounded-full flex justify-around items-center px-6 shadow-2xl border-4 border-white pointer-events-auto">
-          <button onClick={() => navigate('/home')} className={`flex flex-col items-center transition-all ${isHome ? 'text-[#e85d97]' : 'text-slate-400'}`}>
-            <Home size={24} />
-            <span className="text-[8px] font-black uppercase tracking-widest">Início</span>
+      {/* NAV MOBILE AMPLIADA */}
+      <div className="lg:hidden fixed bottom-8 left-0 right-0 flex justify-center px-8 z-50 pointer-events-none">
+        <nav className="w-full max-w-md h-20 bg-white/95 backdrop-blur-md rounded-[2.5rem] flex justify-around items-center px-8 shadow-2xl border-[6px] border-white pointer-events-auto">
+          <button onClick={() => navigate('/home')} className={`flex flex-col items-center gap-1 transition-all active:scale-90 ${isHome ? 'text-[#e85d97]' : 'text-slate-400'}`}>
+            <Home size={32} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Início</span>
           </button>
 
           <button 
             onClick={() => setIsChatOpen(true)}
-            className="relative -top-6 w-16 h-16 bg-[#e85d97] text-white rounded-full flex items-center justify-center shadow-xl border-4 border-white active:scale-95 transition-all"
+            className="relative -top-10 w-20 h-20 bg-[#e85d97] text-white rounded-full flex items-center justify-center shadow-2xl border-[6px] border-white active:scale-95 transition-all animate-bounce-slow"
           >
-            <Sparkles size={28} />
+            <Sparkles size={36} />
           </button>
 
-          <button onClick={() => navigate('/manual')} className={`flex flex-col items-center transition-all ${isManual ? 'text-[#e85d97]' : 'text-slate-400'}`}>
-            <BookOpen size={24} />
-            <span className="text-[8px] font-black uppercase tracking-widest">Manual</span>
+          <button onClick={() => navigate('/manual')} className={`flex flex-col items-center gap-1 transition-all active:scale-90 ${isManual ? 'text-[#e85d97]' : 'text-slate-400'}`}>
+            <BookOpen size={32} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Manual</span>
           </button>
         </nav>
       </div>
@@ -179,6 +212,16 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack, userName }) =>
           </div>
         </div>
       )}
+
+      <style>{`
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 3s infinite ease-in-out;
+        }
+      `}</style>
     </div>
   );
 };

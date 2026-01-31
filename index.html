@@ -101,6 +101,66 @@
       input, select, textarea {
         font-size: 16px !important;
       }
+
+      /* --- ESTILOS DE IMPRESSÃO (PDF) --- */
+      @media print {
+        @page {
+          size: A4;
+          margin: 1.5cm;
+        }
+        
+        body { 
+          background: white !important; 
+          background-image: none !important;
+          color: black !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        header, nav, footer, button, .no-print {
+          display: none !important;
+        }
+
+        #root { 
+          display: block !important;
+          min-height: auto !important;
+        }
+
+        main {
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+        }
+
+        .kitchen-card {
+          border: none !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          transform: none !important;
+        }
+
+        h2 { font-size: 3rem !important; margin-bottom: 1rem !important; }
+        h3 { border-bottom: 2px solid #eee !important; padding-bottom: 5px !important; margin-top: 2rem !important; }
+        
+        .grid {
+          display: block !important;
+        }
+
+        .grid > section {
+          margin-bottom: 2rem;
+          page-break-inside: avoid;
+        }
+
+        .bg-[#fdfaf6] { background-color: #f9f9f9 !important; border: 1px solid #eee !important; }
+        .text-white { color: black !important; }
+        .bg-white { background: white !important; }
+        
+        /* Forçar exibição de textos em cores neutras para leitura */
+        p, span, li { color: #333 !important; }
+        .text-[#e85d97], .text-[#a34e36], .text-[#5d4037] { color: #000 !important; font-weight: bold !important; }
+      }
     </style>
   <script type="importmap">
 {

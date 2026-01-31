@@ -22,7 +22,8 @@ import {
   IceCream,
   GlassWater,
   X,
-  ChefHat
+  ChefHat,
+  FileDown
 } from 'lucide-react';
 import Button3D from '../components/Button3D';
 import { searchRecipesAI } from '../services/geminiService';
@@ -114,12 +115,16 @@ const Recipes: React.FC<{ userName: string }> = ({ userName }) => {
     }
   };
 
+  const handleDownloadPDF = () => {
+    window.print();
+  };
+
   if (selected) {
     return (
       <Layout userName={userName} title={selected.nome} onBack={() => setSelected(null)}>
         <div className="max-w-4xl mx-auto space-y-12 py-10 px-4 animate-in fade-in slide-in-from-bottom-8 duration-700">
           <div className="kitchen-card p-12 md:p-16 relative overflow-hidden border-8 border-white bg-white">
-            <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-[#e85d97] via-[#a34e36] to-[#5d4037]"></div>
+            <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-[#e85d97] via-[#a34e36] to-[#5d4037] no-print"></div>
             
             <div className="flex flex-wrap items-center justify-between gap-6 mb-12">
               <div className="flex gap-4">
@@ -132,7 +137,7 @@ const Recipes: React.FC<{ userName: string }> = ({ userName }) => {
               </div>
               <button 
                 onClick={(e) => toggleFavorite(e, selected.id)}
-                className={`w-16 h-16 rounded-2xl border-4 flex items-center justify-center transition-all active:scale-90 ${favorites.includes(selected.id.toString()) ? 'bg-rose-50 border-rose-100 text-rose-500 shadow-xl' : 'bg-slate-50 border-slate-200 text-slate-300'}`}
+                className={`w-16 h-16 rounded-2xl border-4 flex items-center justify-center transition-all active:scale-90 no-print ${favorites.includes(selected.id.toString()) ? 'bg-rose-50 border-rose-100 text-rose-500 shadow-xl' : 'bg-slate-50 border-slate-200 text-slate-300'}`}
               >
                 <Heart size={32} fill={favorites.includes(selected.id.toString()) ? "currentColor" : "none"} strokeWidth={3} />
               </button>
@@ -182,11 +187,14 @@ const Recipes: React.FC<{ userName: string }> = ({ userName }) => {
                </section>
             </div>
 
-            <div className="mt-20 pt-12 border-t-8 border-[#f0f0f0] flex flex-col sm:flex-row gap-8">
+            <div className="mt-20 pt-12 border-t-8 border-[#f0f0f0] flex flex-col sm:flex-row gap-8 no-print">
+              <Button3D fullWidth size="xl" onClick={handleDownloadPDF} color="primary" className="h-28 text-2xl bg-indigo-600">
+                <FileDown size={40} strokeWidth={3} /> Baixar PDF
+              </Button3D>
               <Button3D fullWidth size="xl" onClick={() => window.open(`https://youtube.com/search?q=como+fazer+${encodeURIComponent(selected.nome)}`, '_blank')} color="danger" className="h-28 text-2xl">
                 <Youtube size={40} strokeWidth={3} /> Passo a Passo
               </Button3D>
-              <button onClick={() => setSelected(null)} className="w-full sm:w-auto px-16 py-8 text-slate-400 font-black text-[12px] uppercase tracking-[0.4em] hover:text-[#e85d97] transition-all">Fechar Receita</button>
+              <button onClick={() => setSelected(null)} className="w-full sm:w-auto px-16 py-8 text-slate-400 font-black text-[12px] uppercase tracking-[0.4em] hover:text-[#e85d97] transition-all">Voltar</button>
             </div>
           </div>
         </div>
@@ -196,7 +204,7 @@ const Recipes: React.FC<{ userName: string }> = ({ userName }) => {
 
   return (
     <Layout userName={userName} title="Receiteca Infinita" onBack={() => navigate('/home')}>
-      <div className="space-y-12 pb-32">
+      <div className="space-y-12 pb-32 no-print">
         
         <div className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-700 text-center md:text-left">
           <label className="label-premium">Receiteca da Dona Camila</label>
